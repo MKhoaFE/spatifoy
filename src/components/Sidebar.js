@@ -196,7 +196,7 @@ const Sidebar = ({ onHome, onSearchClick }) => {
           <Button
             type="primary"
             shape="round"
-            style={{ background: "#000000", marginTop: 20, marginBottom: 20 }}
+            style={{ background: "#000000", marginTop:5, marginBottom: 35 }}
             onClick={handleLanguageSwitch}
           >
             {language}

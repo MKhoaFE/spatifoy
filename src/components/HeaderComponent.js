@@ -66,7 +66,7 @@ function HeaderComponent()
           <Button onClick={() => auth.signOut()}><LogoutIcon/> Logout</Button>
         </Space> : <Space className="right">
 
-          <Button onClick={() => setisSingIn(true)}>Sign in</Button>
+          <Button onClick={() => setisSingIn(true)}>Sign up</Button>
           <Button onClick={() => setIsLogin(true)}>Login</Button>
 
         </Space>

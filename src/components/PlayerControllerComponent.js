@@ -8,6 +8,8 @@ import { audioSelector } from "../redux/reducers/audioReducer";
 import TitleComponent from "./TitleComponent";
 import { audios } from "../datas/audios";
 import { authors } from "../datas/authors";
+import SkipNextIcon from '@mui/icons-material/SkipNext';
+import SkipPreviousIcon from '@mui/icons-material/SkipPrevious';
 
 function PlayerControllerComponent() {
   const audio = useSelector(audioSelector);
@@ -16,10 +18,23 @@ function PlayerControllerComponent() {
   const [isPlaying, setIsPlaying] = useState(false);
   const playerRef = useRef();
 
-  useEffect(() => {
-    // console.log('audio')
-    // console.log(audio)
+  const [currentTime, setCurrentTime] = useState(0);
+  const [duration, setDuration] = useState(0);
 
+  useEffect(() => {
+    // Update the currentTime and duration when the audio metadata loads
+    playerRef.current.addEventListener("loadedmetadata", () => {
+      setDuration(playerRef.current.duration);
+    });
+
+    // Update currentTime when time updates
+    playerRef.current.addEventListener("timeupdate", () => {
+      setCurrentTime(playerRef.current.currentTime);
+    });
+  }, []);
+  
+
+  useEffect(() => {
     if (audio) {
       getAllChapters();
     }
@@ -35,6 +50,11 @@ function PlayerControllerComponent() {
       setIsPlaying(false);
     }
   };
+  const formatTime = (timeInSeconds) => {
+    const minutes = Math.floor(timeInSeconds / 60).toString().padStart(2, "0");
+    const seconds = Math.floor(timeInSeconds % 60).toString().padStart(2, "0");
+    return `${minutes}:${seconds}`;
+  };
 
   // console.log(audio)
   const author = authors.find((author) => author.key === audio.authorId);
@@ -47,6 +67,7 @@ function PlayerControllerComponent() {
     }
     setIsPlaying(!isPlaying); // Đảo ngược trạng thái phát/nghỉ
   };
+  
 
   return audio ? (
     <div className="player-controler text-light">
@@ -63,13 +84,15 @@ function PlayerControllerComponent() {
         <div className="col text-center">
           <div>
             <Space>
-            <Button onClick={togglePlay} type="text" icon={isPlaying ? <PauseCircleFilled style={{ fontSize: 32, color: "white" }} /> : <PlayCircleFilled style={{ fontSize: 32, color: "white" }} />} />
+            <SkipPreviousIcon style={{fontSize:32,verticalAlign: 'middle', cursor:"pointer"}}/>
+            <Button onClick={togglePlay} type="text" icon={isPlaying ? <PauseCircleFilled style={{fontSize: 32, color: "white",marginBottom: '10px' }} /> : <PlayCircleFilled style={{ fontSize: 32, color: "white",marginBottom: '10px' }} />} />
+            <SkipNextIcon style={{fontSize:32,verticalAlign: 'middle',cursor:"pointer"}}/>
             </Space>
           </div>
 
           <div>
             <Space>
-              00:00
+            <span style={{fontSize:"12px"}}>{formatTime(currentTime)}</span>
               <div className="col ">
                 <Slider
                   style={{
@@ -77,7 +100,8 @@ function PlayerControllerComponent() {
                   }}
                 />
               </div>
-              00:00
+              <span style={{fontSize:"12px"}}>{formatTime(duration)}</span>
+            
             </Space>
           </div>
         </div>

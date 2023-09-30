@@ -4,7 +4,8 @@ import { Input, Space } from "antd";
 import { poster } from "../datas/poster";
 import { authors } from "../datas/authors";
 import { categories } from "../datas/categories";
-import PosterList from "./PosterList";
+import { useNavigate } from "react-router-dom";
+
 
 const suffix = (
   <SearchIcon
@@ -23,6 +24,12 @@ function SearchBar({ onSearch }) {
   const [searchTerm, setSearchTerm] = useState("");
   const [showResults, setShowResults] = useState(false); // Sử dụng biến trạng thái để kiểm soát việc hiển thị danh sách
 
+  const navigate = useNavigate();
+
+  const handleSearch=()=>{
+    navigate(`/search/${searchTerm}`);
+  }
+
   const filteredPosters = poster.filter((poster) =>
     poster.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
@@ -39,9 +46,9 @@ function SearchBar({ onSearch }) {
         placeholder="Tìm kiếm theo tiêu đề"
         value={searchTerm}
         onChange={handleInputChange}
-        
+        onPressEnter={handleSearch}
       />
-      {showResults && <PosterList posters={filteredPosters} />}
+
     </Space.Compact>
   );
 }

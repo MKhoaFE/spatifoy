@@ -23,6 +23,8 @@ import LoginForm from "./components/LoginForm";
 import RegisterForm from "./components/RegisterForm";
 import { Provider } from "react-redux";
 import store from "./redux/store";
+import ResultSearch from "./pages/ResultSearch";
+
 
 const { Content, Header } = Layout;
 
@@ -73,7 +75,7 @@ function App({ onSearch, onHome })
                   <Route path="/" element={<Home />}></Route>
                   <Route path="/product/:id" element={<ProductDetail />} />
                   <Route path="/search" element={<SearchScreen />} />
-                  
+                  <Route path="/search/:searchTerm" element={<ResultSearch/>}/>
                   <Route path="/top-chart" element={<TopChart />} />
                   <Route path="/top-artists" element={<TopArtists />} />
                   <Route path="/truyen" element={<Truyen />} />

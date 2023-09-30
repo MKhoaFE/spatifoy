@@ -26,7 +26,7 @@ function ModalSignIn({ isVisible, onClose })
         }
       }).catch((error) =>
       {
-        message.error('Sign in not successfully!')
+        message.error('Log in not successfully!')
         console.log(error)
       })
     }
@@ -37,7 +37,7 @@ function ModalSignIn({ isVisible, onClose })
     <Modal footer={null} open={isVisible} onCancel={onClose}>
 
       <div className='text-center'>
-        <h1>Sign In</h1>
+        <h1>Sign Up</h1>
       </div>
 
       <Form layout='vertical' size='large' ref={formRef} onFinish={handleSignIn}>

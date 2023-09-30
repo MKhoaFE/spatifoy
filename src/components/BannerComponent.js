@@ -1,29 +1,31 @@
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import PlayCircleFilledWhiteIcon from "@mui/icons-material/PlayCircleFilledWhite";
 import { Card, Col, Image, List, Row, Typography } from "antd";
-import React from "react";
+import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { addAudio } from "../redux/reducers/audioReducer";
+import {audios} from "../datas/audios";
 
 const BannerComponent = ({ bannerItem, chapterItem, authorItem }) =>
 {
-  // if (!bannerItem) {
-  //   return <div>Cant find banner</div>;
-  // }
-  // if (!chapterItem || !chapterItem.chaps) {
-  //   return <div>Cant find data chapter</div>;
-  // }
-  // if (!authorItem) {
-  //   return <div>Cant find data author</div>;
-  // }
 
   const dispatch = useDispatch()
-
-  const handleAddAudioToStore = () =>
-  {
+  const [currentChapterIndex, setCurrentChapterIndex] = useState(null);
+  const handleAddAudioToStore = () =>{
     // console.log(bannerItem)
     dispatch(addAudio(bannerItem))
   }
+  
+
+  const handlePlayChapter = (chapterIndex)=>{
+    setCurrentChapterIndex(chapterIndex);
+    
+  };
+
+  const resetCurrentChapter =()=>{
+    setCurrentChapterIndex(null);
+  };
+
 
   return (
     <>
@@ -83,16 +85,37 @@ const BannerComponent = ({ bannerItem, chapterItem, authorItem }) =>
         <List
           bordered
           dataSource={chapterItem.chaps.map((chap) => chap.title)}
-          renderItem={(item1) => (
-            <List.Item>
+          renderItem={(item1, index) => (
+            <List.Item onClick={() => handlePlayChapter(index)}>
               <Typography.Text style={{ cursor: "pointer" }}>
-                <PlayArrowIcon />
+              {currentChapterIndex === index ? (
+                  <PlayCircleFilledWhiteIcon
+                    style={{
+                      cursor: "pointer",
+                      fontSize: 24,
+                      color: "#2B2730",
+                      backgroundColor: "#FFFFFF",
+                      borderRadius: " 100%",
+                      marginRight: 12,
+                    }}
+                  />
+                ) : (
+                  <PlayArrowIcon />
+                )}
+                
               </Typography.Text>
               {item1}
             </List.Item>
           )}
         />
       </Card>
+      {currentChapterIndex !== null && (
+        <audio
+          autoPlay
+          src={chapterItem.chaps[currentChapterIndex].audio}
+          onEnded={resetCurrentChapter}
+        />
+      )}
     </>
   );
 };
